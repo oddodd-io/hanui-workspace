@@ -1,0 +1,23 @@
+# Child repositories are backed up in their own GitHub repositories.
+hanui/
+hanui-cms/
+krds-checker/
+claude-settings/
+
+# Local and generated files
+.DS_Store
+.playwright-mcp/
+**/node_modules/
+**/dist/
+**/.next/
+**/.turbo/
+**/.omc/
+.env
+.env.*
+!.env.example
+
+# Local verification output
+project-notes/verification/**/node_modules/
+
+# External reference is reproducible from its recorded upstream commit.
+reference/krds-uiux/

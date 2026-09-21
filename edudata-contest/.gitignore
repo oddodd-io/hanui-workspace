@@ -1,0 +1,55 @@
+# macOS
+.DS_Store
+._*
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Data (외부 다운로드 자료 — 용량·라이선스 고려)
+data/raw/
+data/cache/
+data/*.csv
+data/*.xlsx
+data/*.json
+!data/.gitkeep
+!data/README.md
+
+# Notebooks 캐시
+notebooks/.ipynb_checkpoints/
+notebooks/__pycache__/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Claude / OMC 상태
+.omc/
+.claude/settings.local.json
+
+# 임시
+*.tmp
+*.bak
+*~
