@@ -10,7 +10,7 @@
 
 ## 작업 위치 — 중요
 
-**지금부터 사용할 경로는 `/Users/mia/github/hanui`다.**
+**지금부터 사용할 경로는 `/Users/mia/github/hanui-workspace`다.**
 
 이 폴더는 독립 저장소 여러 개를 묶은 작업 공간이다. 상위 자체는 Git 저장소가 아니다.
 

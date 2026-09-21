@@ -2,9 +2,9 @@
 
 2026-09-21 · 로컬 복사 및 무결성 검증 완료.
 
-- 새 작업 경로: `/Users/mia/github/hanui`
+- 새 작업 경로: `/Users/mia/github/hanui-workspace`
 - 이전 경로: `/Users/mia/Library/Mobile Documents/com~apple~CloudDocs/odada/00-github/hanui`
-- 기존 `/Users/mia/github/hanui-이건뭐지?` 폴더는 변경하지 않음.
+- 기존 `/Users/mia/github/hanui-workspace-이건뭐지?` 폴더는 변경하지 않음.
 - 소스·문서·미커밋 수정·Git 이력·로컬 설정을 복사. 기존 React 삭제 상태도 그대로 보존.
 - 원본 5,189개 파일의 SHA-256 또는 심볼릭 링크 대상을 대조하여 불일치 0건 확인.
 - `node_modules`, `.next`, `.turbo`는 원본 복사에서 제외. 생성물 `dist`와 기타 자료는 보존.
@@ -15,7 +15,7 @@
 
 ## 재개 방법
 
-Codex에서 `/Users/mia/github/hanui`를 프로젝트로 열고 새 작업 경로에서 이어간다. 기존 대화의 기본 작업 경로와 파일 쓰기 권한은 자동으로 바뀌지 않는다.
+Codex에서 `/Users/mia/github/hanui-workspace`를 프로젝트로 열고 새 작업 경로에서 이어간다. 기존 대화의 기본 작업 경로와 파일 쓰기 권한은 자동으로 바뀌지 않는다.
 
 Vue 검증은 `hanui/packages/vue`에서 `npm test`, `npm run typecheck`, `npm run build`로 실행할 수 있다. 전체 워크스페이스 의존성을 다시 설치하기 전에 React 패키지 삭제 상태를 먼저 확인한다.
 
