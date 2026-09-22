@@ -60,6 +60,13 @@
 - [x] CLI `variables.css`·Tailwind 프리셋과 Vue 패키지 토큰의 역할 차이 기록 → 패키지는 baseline CSS, CLI는 전체 Tailwind 통합 담당
 - [ ] KRDS 공식 제공 킷과 기존 HANUI의 차이·보완 가치 확인
 - [x] KRDS 공식 저장소 구조·HTML/CSS/JS·토큰·라이선스 안내 1차 확인 → [KRDS 소스 점검](krds-source-audit.md)
+- [x] KRDS Button 기준표 작성 → [Button 기준표](krds-button-baseline.md)
+- [x] Button 중앙 CSS/API 전환 및 기존 API 호환 별칭 유지
+- [x] Input·FormField·Select 중앙 CSS/API 전환 및 기존 접근성 테스트 통과
+- [x] Vue 패키지 전체 검증: 37개 테스트 파일·312개 테스트, 타입 검사, 빌드 통과
+- [x] Vue Storybook에 Button·Input·FormField·Select의 상태별 검증 화면 추가
+- [ ] 이후 UI 컴포넌트 변경 시 Storybook 스토리와 화면 검증을 함께 갱신
+- [ ] Button·Input·FormField·Select의 실제 브라우저 화면·고대비·스크린리더 독립 검토
 
 ## 방향 확인 후 진행할 작업
 

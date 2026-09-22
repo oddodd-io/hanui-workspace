@@ -36,7 +36,7 @@ KRDS 소스를 통째로 Vue로 다시 포팅하지 않는다. 원본 HTML·CSS�
 
 ## 다음 검증
 
-1. v0 필수 컴포넌트의 KRDS 원본 HTML·상태 예제와 HANUI API 매핑표 작성
+1. [KRDS Button 기준표](krds-button-baseline.md)와 같이 v0 필수 컴포넌트의 KRDS 원본 HTML·상태 예제와 HANUI API 매핑표 작성
 2. 토큰 JSON에서 색상·간격·타이포그래피·모션 토큰 추출
 3. Button, Input, FormField, Select, Table, Pagination, Modal부터 중앙 CSS로 전환
 4. 원본 예제와 Vue 렌더링을 실제 브라우저에서 비교

@@ -16,9 +16,9 @@
 
 | 하위 폴더 | 역할 |
 | --- | --- |
-| `hanui` | KRDS 기반 React·Vue 컴포넌트, CLI, 문서 사이트 |
-| `hanui-cms` | 기관 공개 홈페이지·관리자·Java 백엔드. 현재 프론트 구현은 Next.js·React |
-| `krds-checker` | KRDS 검수 대응용 점검 도구. **이름 그대로 유지하기로 사용자 결정** |
+| `repos/hanui` | KRDS 기반 React·Vue 컴포넌트, CLI, 문서 사이트 |
+| `repos/hanui-cms` | 기관 공개 홈페이지·관리자·Java 백엔드. 현재 프론트 구현은 Next.js·React |
+| `repos/krds-checker` | KRDS 검수 대응용 점검 도구. **이름 그대로 유지하기로 사용자 결정** |
 | `project-notes` | 사업 의도·기술 결정·설계·체크리스트·진행 기록 |
 | `claude-settings` | 개발 커맨드·훅·에이전트 설정 저장소 |
 | `edudata-contest`, `blog-topics` | 별도 기획·로컬 블로그 자료 |
@@ -50,7 +50,7 @@
 
 Vue 기본 구현 파일 125개와 기존 테스트를 확인했다. React 기본 구현은 78개 파일이다. Vue는 하위 구성 요소가 별도 파일이므로 숫자를 기능 개수로 직접 비교하지 않는다.
 
-`hanui/packages/vue`에서 다음을 수정했다.
+`repos/hanui/packages/vue`에서 다음을 수정했다.
 
 - Input의 실제 입력 요소로 id/name/required/aria 속성 전달, readonly 지우기 차단, 보조 버튼 키보드 접근·비활성 상태.
 - Select의 방향키·Home/End·문자 검색·선택·닫기·외부 클릭, 레이블과 활성 옵션 연결.
@@ -63,7 +63,7 @@ Vue 기본 구현 파일 125개와 기존 테스트를 확인했다. React 기�
 
 **검증: 테스트 37개 파일·309개 통과, 타입 검사 통과, Vite 빌드 성공.**
 
-검증은 iCloud 의존성의 dataless 읽기 지연을 피하려고 `/tmp/hanui-vue-audit`에 소스와 설정을 복사해 수행했다. package.json 허용 범위로 새로 설치한 의존성이며 원래 pnpm 잠금 버전 그대로는 아니다. 그 node_modules를 로컬 `hanui/packages/vue/node_modules`에 복사했다. 다른 앱의 의존성은 아직 준비하지 않았다.
+검증은 iCloud 의존성의 dataless 읽기 지연을 피하려고 `/tmp/hanui-vue-audit`에 소스와 설정을 복사해 수행했다. package.json 허용 범위로 새로 설치한 의존성이며 원래 pnpm 잠금 버전 그대로는 아니다. 그 node_modules를 로컬 `repos/hanui/packages/vue/node_modules`에 복사했다. 다른 앱의 의존성은 아직 준비하지 않았다.
 
 검증 당시 Node 26.7.0, Vue 3.5.43, Vitest 4.1.11, Vite 6.4.3. 정확한 잠금과 로그는 `project-notes/verification/vue-2026-09-21`에 있다. `/tmp`가 삭제돼도 기록은 남도록 복사했다.
 
@@ -83,7 +83,7 @@ CMS에도 기존 미커밋 변경이 있다(페이지 편집 화면 포함). 해
 4. Vue의 문서·CLI·export 대응과 실제 lint 설정을 정리한다. 전체 125개 파일이 검증된 것은 아니다.
 5. Node 직접 ESM/CJS import에서 Swiper CSS 로더 오류가 있었다. 실제 사용할 번들러·SSR 경로를 확인하고 패키지 소비 검증을 진행한다.
 6. 공지 목록·작성·상세 설계에 필요한 검증된 Vue 컴포넌트로 첫 화면을 구현한다. Vue 앱 구성은 기존 저장소·기획을 검토해 근거를 남긴다.
-7. 기존 Java 소스·빌드 설정을 점검하고 전자정부프레임워크 v5 기반 인증·권한·공지 API와 DB를 연결한다. 첫 흐름은 **초안 저장 → 권한 있는 미리보기 → 게시 → 공개 목록·상세**다.
+7. `repos/hanui-cms`의 기존 Java 소스·빌드 설정을 점검하고 전자정부프레임워크 v5 기반 인증·권한·공지 API와 DB를 연결한다. 첫 흐름은 **초안 저장 → 권한 있는 미리보기 → 게시 → 공개 목록·상세**다.
 
 기본 권한은 기관 관리자·콘텐츠 담당자 두 가지, 담당자는 사이트 내 콘텐츠 공동 관리다. 수정 초안 저장만으로 기존 게시본을 바꾸지 않고, 휴지통 복원은 초안으로 처리한다. 상세 정책은 사이트맵 문서를 기준으로 한다.
 
@@ -105,3 +105,4 @@ CMS에도 기존 미커밋 변경이 있다(페이지 편집 화면 포함). 해
 - 스타일은 중앙 CSS와 CSS 변수로 관리한다. 컴포넌트별 scoped 스타일이나 Tailwind 클래스에 핵심 스타일을 분산하지 않는다.
 - KRDS 공식 저장소를 `reference/krds-uiux`에 클론했다. KRDS 원본은 구조·상태·토큰·접근성 대조 기준으로 사용하고, Vue 동작과 CMS 상태를 포함해 재작성한다.
 - 현재 모델이 구현하고 자동·브라우저 검증을 수행한 뒤, 더 강한 모델이 독립 검토한다. 지적 사항 수정과 재검증 전에는 OK로 기록하지 않는다.
+- Vue UI 컴포넌트를 수정하거나 추가하면 해당 variant·상태·오류 사례를 `repos/hanui/packages/vue`의 Storybook 스토리에도 함께 반영한다. Storybook은 자동 테스트를 대체하지 않으며, 실제 화면·키보드·접근성 상태를 빠르게 확인하는 기준으로 사용한다.
