@@ -68,6 +68,27 @@
 - [ ] 이후 UI 컴포넌트 변경 시 Storybook 스토리와 화면 검증을 함께 갱신
 - [ ] Button·Input·FormField·Select의 실제 브라우저 화면·고대비·스크린리더 독립 검토
 
+## 2026-09-22 · Vue 패키지 재구축 (KRDS 리소스 그대로 사용)
+
+방향 변경: 기존 125개 Tailwind/cva 기반 Vue 컴포넌트를 버리고, KRDS HTML ComponentKit의 CSS·토큰·아이콘을 그대로 쓰는 얇은 Vue 래퍼로 새로 만든다. 운영·업데이트 편의가 이유다. 2026-09-21의 "Button·Input·FormField·Select 중앙 CSS 전환" 기록은 다른 환경(`/Users/mia/...`)에서 미커밋 상태였고 현재 저장소에는 없다.
+
+- [x] `reference/krds-uiux` 재클론 확인 (v1.1.0, `d6bb184`)
+- [x] `packages/vue/vendor/krds-uiux/`에 `resources/`·`tokens/` 복사, `VERSION.md`로 버전·업데이트 절차 기록. 원본과 바이트 동일 확인
+- [x] 기존 `src/` 전부 제거. cva·clsx·tailwind-merge·lucide 의존성 제거, `sass-embedded` 추가
+- [x] SCSS 진입점 `src/styles/index.scss`: vendor `output.scss` 구성을 재현 (vendor `common.scss`의 토큰 CSS `@import` 상대경로가 Vite에서 깨지므로 직접 import). `$url !default`를 덮어써 아이콘 350개를 빌드 시 data URI로 인라인 → `dist/vue.css` 단일 파일 (gzip 101KB)
+- [x] Button 재작성: `variant`(primary/secondary/tertiary/text/link, 기본 primary), `size`(xsmall~xlarge, 기본 large), `icon`/`border`/`label`(sr-only), `pure`/`basic`, `disabled`/`loading`, `href` 링크 분기. JS 동작·접근성만 Vue가 담당, 스타일은 KRDS 클래스 그대로. loading 스피너만 hanui 확장 (`src/styles/_button.scss`)
+- [x] 검증: 테스트 30개 통과, `vue-tsc` 통과, `eslint` 통과, `vite build` 성공. 실제 브라우저(Chromium) 렌더링으로 계층·크기·disabled·아이콘·고대비 모드 확인
+- [x] Storybook 10 (`@storybook/vue3-vite` + addon-docs + addon-a11y) 설치. `pnpm storybook` / `pnpm build-storybook`. 툴바에 KRDS Light/High Contrast 모드 스위치(`data-krds-mode`), a11y 위반 시 스토리 실패 처리
+- [x] Button 스토리 9종 (Default·Hierarchy·Sizes·WithIcon·IconOnly·Disabled·Loading·AsLink·HighContrast). 빌드·브라우저 렌더링·a11y 패널(위반 0) 확인
+- [ ] 스크린리더·키보드 실기기 검토
+- [ ] 아이콘 data URI 인라인 vs 파일 분리 배포 결정 (현재 인라인)
+- [x] Button에서 hanui 확장(loading 스피너, `src/styles/_button.scss`) 제거 → `vue.css`는 KRDS 원본 100%. 테스트 27개 통과
+- [x] FormField(`.form-group` / label / `.form-conts.is-*` / `.form-hint*`, id·aria-describedby provide) + Input(`input.krds-input`, v-model, size 4종, 비밀번호 보기·내용 삭제 버튼 → KRDS `.btn-ico-wrap`) 완료. 테스트 57개(누적)·typecheck·lint·빌드 통과, Storybook 스토리 7종, 브라우저로 상태 3종·아이콘 버튼 확인
+- [x] Textarea(`.textarea-wrap > textarea.krds-input + .textarea-count`, maxlength 시 글자수 카운트, FormField 연결) 완료. 테스트 69개(누적), 스토리 5종, 브라우저로 에러 상태 카운트 색 확인
+- [x] Select(네이티브 `select.krds-form-select` + `sort` 변형, size 3종, `.completed`/`.is-error`, options prop 또는 슬롯, FormField 연결) 완료. 테스트 87개(누적), 스토리 5종, 브라우저 확인. 단독 사용 시 aria-label 필요(title만은 axe 경고)
+- [ ] 최소 CMS 컴포넌트 (KRDS 원본만, 순서대로): ~~Input → FormField → Textarea → Select~~ → Select → Table → Pagination → Badge → Modal → FileUpload → Breadcrumb → SkipLink → Header/Masthead → Footer → SideNavigation → Spinner
+- [ ] Vue 문서 사이트·CLI·registry는 새 패키지 기준으로 재정리 필요 (현재 25개 docs 페이지의 `vueCode`는 구 API)
+
 ## 방향 확인 후 진행할 작업
 
 - [ ] Vue 집중 범위와 React 유지 범위 확정

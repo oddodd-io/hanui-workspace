@@ -1,8 +1,11 @@
 # Child repositories are backed up in their own GitHub repositories.
 hanui/
-hanui-cms/
+hanui-vue-cms/
 krds-checker/
 claude-settings/
+
+# KRDS 공식 저장소 클론 (대조용). 복사본은 repos/hanui/packages/vue/vendor/krds-uiux 에 있다.
+reference/krds-uiux/
 
 # Local and generated files
 .DS_Store
