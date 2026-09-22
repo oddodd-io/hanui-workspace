@@ -18,6 +18,3 @@ claude-settings/
 
 # Local verification output
 project-notes/verification/**/node_modules/
-
-# External reference is reproducible from its recorded upstream commit.
-reference/krds-uiux/
