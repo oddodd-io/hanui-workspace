@@ -34,6 +34,22 @@ KRDS 소스를 통째로 Vue로 다시 포팅하지 않는다. 원본 HTML·CSS�
 
 특히 `transformed_tokens.json`은 현재 HANUI가 가진 일부 색상 토큰보다 범위가 넓다. 현재 패키지의 baseline 토큰을 KRDS 원본 토큰과 대조해 누락을 채우되, 임의 이름 변경으로 기존 컴포넌트를 깨지 않도록 호환 별칭을 둔다.
 
+## KRDS 원본 결함 기록 (vendor는 수정하지 않음)
+
+- **Badge outline 테두리 색 (v1.1.0)**: `_badge.scss`의 `color-border` 믹스인이 primary 외 8색에서 정의되지 않은 `--krds-badge--light-color-{색}-element`를 참조한다. 그 결과 `border-color`가 무효 처리되어 글자색(currentColor)으로 대체된다. 2026-09-29 브라우저 확인: outline-secondary~disabled 테두리 = 글자색, outline-primary만 전용 테두리 색(`#256ef4`)이다. 화면 차이는 작다. KRDS 업데이트 시 수정 여부를 확인한다.
+- **Modal JS (`ui-script.js` krds_modal, v1.1.0)**: ① Esc 리스너가 `{ once: true }`라 Tab 등 다른 키를 먼저 누르면 Esc로 닫히지 않음 ② 초점 가두기 대상을 열 때 한 번만 계산 ③ 배경 inert를 `#wrap` id에만 적용 ④ `body.scroll-no`를 붙이지만 CSS 정의가 없어 배경 스크롤이 잠기지 않음 ⑤ `aria-modal` 없음. Vue Modal에서 모두 보완했다(2026-09-29).
+- **Modal 첫 초점 지연의 이유**: `.krds-modal`의 visibility 전환과 `.krds-btn` 자체 transition 때문에 열린 직후 몇 프레임 동안 버튼이 hidden 상태라 `focus()`가 무시된다. 원본은 350ms 고정 지연으로 처리하고, Vue는 초점이 들어갈 때까지 프레임마다 재시도한다.
+- **FileUpload (v1.1.0)**: JS(`krds_fileUpload`)가 주석대로 "drag 임시" — drop 시 테두리만 바꾸고 파일을 처리하지 않으며 목록 추가·삭제·검사 동작이 없다. 마크업의 `<label for><button>`은 레이블 안에 다른 레이블 가능 요소(button)를 넣어 HTML 규칙 위반. Vue FileUpload에서 동작을 채우고 label 중첩은 쓰지 않았다(2026-09-30).
+- **Breadcrumb (v1.1.0)**: ① 현재 페이지 항목에 `aria-current="page"` 없음 → Vue에서 추가 ② 모바일 폭에서 중간 항목을 `sr-only`로 숨기지만 링크는 여전히 Tab 초점을 받아, 보이지 않는 곳에 초점이 간다(WCAG 2.4.7 초점 표시 위반 소지). → 2026-09-30 `_hanui-fixes.scss`로 보완(초점이 들어온 항목만 표시).
+- **Dropdown (`krds_dropEvent`, v1.1.0)**: 선택 항목 링크에 `aria-selected`를 붙이는데 link 역할에 허용되지 않는 속성이다. Vue DropMenu는 KRDS의 sr-only "선택됨" 문구만 쓴다(2026-09-30).
+- **Header 스크롤 동작**: `#wrap`·`#container` id 구조에 의존한다. Vue Header는 두 요소가 있을 때만 scroll-down/up 클래스를 붙인다.
+- **주메뉴 PC (`krds_mainMenuPC`, v1.1.0)**: ① Home/End가 2depth에서도 1depth 처음·끝으로 이동 ② Esc로 닫아도 초점을 1depth 버튼에 돌려주지 않음 ③ "메인 메뉴" 이름을 ul에 붙여 랜드마크(nav)로 찾을 수 없음. Vue MainMenu에서 보완(2026-09-30).
+- **모바일 전체메뉴 (`krds_mainMenuMobile`, v1.1.0)**: ① 여는 버튼 aria-expanded 주석 처리 ② Esc로 닫히지 않음 ③ inert를 `#container`·`#footer` 고정 id로 걸어 KRDS 푸터(`#krds-footer`)가 빠짐 ④ 열 때마다 초점 가두기 리스너 누적·대상 고정 ⑤ tablist/tab 역할이지만 방향키 동작 없음 ⑥ 펼침 요소가 `a[href="#"]` ⑦ 4depth 본문이 `ul > h4`(HTML 위반) ⑧ 4depth "전체메뉴 닫기"가 4depth만 닫음 ⑨ 메뉴 영역에 대화상자 역할 없음. Vue MobileMenu에서 보완(2026-09-30). 펼침 요소를 button으로 바꾸면서 KRDS a와 같은 폭을 위해 인라인 `width:100%; text-align:left`만 추가했다.
+- **Footer `.f-menu a.point` (v1.1.0)**: 샘플 마크업은 개인정보처리방침에 `.point`를 붙이지만 CSS 정의가 없어 다른 링크와 똑같이 보인다. 개인정보처리방침은 다른 링크와 구별되게(색·굵기) 표시하도록 요구되므로 → 2026-09-30 `_hanui-fixes.scss`로 보완(굵게 + primary).
+- **Footer 관련 사이트(.foot-quick)**: 레이어를 여는 버튼만 있고 레이어 마크업·JS가 없다. Vue Footer는 quick 슬롯으로 비워 둔다.
+- **SideNavigation (`krds_sideNavigation`, v1.1.0)**: ① menubar/menu/menuitem 역할을 쓰지만 방향키 동작이 없어 스크린리더 사용자가 기대한 조작이 안 됨 ② 3depth 팝업 밖으로 Tab 이동 시 transitionend 후 초점을 여는 버튼으로 강제 이동 ③ nav에 이름 없음. Vue SideNavigation은 APG 사이트 내비게이션 권고대로 목록 + aria-expanded 버튼으로 두고(menu 역할 제거), 팝업은 초점 강제 이동 없이 닫으며 Esc·제목 버튼일 때만 되돌리고, nav 이름을 제목으로 연결(2026-09-30).
+- **Spinner (v1.1.0)**: 화면 문구와 sr-only "로딩 중"을 함께 넣어 두 번 읽힘 → Vue Spinner는 화면 문구가 있으면 sr-only 생략. 회전 애니메이션에 `prefers-reduced-motion` 대응 없음(WCAG 2.3.3은 AAA라 필수는 아님, 기록만).
+
 ## 다음 검증
 
 1. [KRDS Button 기준표](krds-button-baseline.md)와 같이 v0 필수 컴포넌트의 KRDS 원본 HTML·상태 예제와 HANUI API 매핑표 작성

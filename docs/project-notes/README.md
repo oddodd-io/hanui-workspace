@@ -6,6 +6,7 @@
 | --- | --- |
 | [사업 목적](vision.md) | 왜 만드는지, 대상 사용자, 세 제품의 관계 |
 | [첫 납품 범위와 합격 기준](first-delivery.md) | 대상 사용자, 첫 제품 기능, 검증 시나리오와 출고 기준 |
+| [v1 로드맵](v1-roadmap.md) | 그누보드 기준 v1 범위와 1·2·3차 계획 |
 | [사이트맵과 권한 구조](sitemap-and-permissions.md) | 공개·관리자 메뉴, 역할별 권한, 콘텐츠 상태와 첫 구현 순서 |
 | [기술 선택 기록](decisions.md) | 선택의 배경, 현재 방향, 확정 여부, 재검토 조건 |
 | [컴포넌트 체크리스트](component-checklist.md) | 구현·KRDS·웹접근성·사용성의 점검 기준 |
@@ -14,6 +15,7 @@
 | [Vue 컴포넌트 목록](vue-inventory.md) | 125개 구현 파일의 export·개별 테스트 존재 여부 |
 | [로컬 이전 기록](local-migration.md) | 경로, 복사 검증, 의존성 상태와 원본 보존 |
 | [할 일과 진행 상태](tasks.md) | 확인된 현황, 우선순위, 다음 작업, 완료 근거 |
+| [작업 정리 2026-09-30](work-summary-2026-09-30.md) | Vue 컴포넌트 21개 완성, KRDS 결함 처리, CMS 구성 확정과 진행 상태 |
 | [백엔드 초기 점검](backend-audit.md) | 기존 Java 소스·빌드 상태·인증·게시 상태 위험 |
 | [KRDS 소스 점검](krds-source-audit.md) | 공식 HTML Kit의 파일 구조, 토큰, 적용 판단 |
 
