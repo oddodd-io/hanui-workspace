@@ -3,29 +3,73 @@
 1차 독립 검토 OK 이후 남은 사람 확인 항목. 사용자가 직접 확인하고 결과를 아래 "결과" 칸에 적는다(또는 Claude에게 알려 주면 기록·수정).
 자동 테스트로는 볼 수 없는 것만 모았다. 관련 기록: [tasks.md](../tasks.md) "1차 독립 검토 OK".
 
-## 준비 (집 등 다른 컴퓨터에서)
+## 켜는 순서 (집 등 다른 컴퓨터에서)
+
+필요한 것: Node 22 이상, pnpm(`npm i -g pnpm`), Git. 확인: `node -v`, `pnpm -v`
+
+### 0단계. 저장소 받기
+
+**처음이면 (그 컴퓨터에 작업 공간이 없을 때)** — 하위 저장소는 작업 공간 저장소에 들어 있지 않아 따로 받는다.
 
 ```bash
-# 세 저장소 모두 최신으로
-cd hanui-workspace && git pull
-git -C repos/hanui pull
-git -C repos/hanui-vue-cms pull
-
-# 1) 라이브러리 빌드 — CMS가 repos/hanui/packages/vue/dist를 link로 쓴다 (dist는 저장소에 없음)
-cd repos/hanui && pnpm install && pnpm --filter @hanui/vue build
-
-# 2) CMS 의존성
-cd ../hanui-vue-cms && pnpm install
-
-# 3) 터미널 3개에서 각각
-pnpm mock         # mock API  http://localhost:4010
-pnpm dev:admin    # 관리자    http://localhost:3400
-pnpm dev:public   # 공개      http://localhost:3300
+git clone https://github.com/oddodd-io/hanui-workspace.git
+cd hanui-workspace
+mkdir -p repos
+git clone https://github.com/oddodd-io/hanui.git repos/hanui
+git clone https://github.com/oddodd-io/hanui-vue-cms.git repos/hanui-vue-cms
 ```
 
+**이미 있으면** — 세 곳 모두 최신으로.
+
+```bash
+cd hanui-workspace
+git pull
+git -C repos/hanui pull
+git -C repos/hanui-vue-cms pull
+```
+
+### 1단계. 라이브러리 빌드 (pull할 때마다 한 번)
+
+CMS 화면이 `repos/hanui/packages/vue/dist`를 그대로 쓰는데, dist는 저장소에 없다. **이걸 빼먹으면 관리자·공개 화면이 뜨지 않는다.**
+
+```bash
+cd repos/hanui
+pnpm install
+pnpm --filter @hanui/vue build
+```
+
+끝에 오류 없이 `built in …`이 나오면 성공.
+
+### 2단계. CMS 의존성 설치 (pull할 때마다 한 번)
+
+```bash
+cd ../hanui-vue-cms
+pnpm install
+```
+
+### 3단계. 서버 3개 켜기 — 터미널 3개, 이 순서대로
+
+모두 `repos/hanui-vue-cms` 폴더에서 실행한다. 끌 때는 각 터미널에서 Ctrl+C.
+
+| 순서 | 터미널 | 명령 | 다 켜졌다는 표시 | 주소 |
+| --- | --- | --- | --- | --- |
+| ① | 1번 | `pnpm mock` | `[mock-api] http://localhost:4010 …` | (API, 브라우저로 열 필요 없음) |
+| ② | 2번 | `pnpm dev:admin` | `Local: http://localhost:3400/` | 관리자 http://localhost:3400 |
+| ③ | 3번 | `pnpm dev:public` | `Local: http://localhost:3300/` | 공개 http://localhost:3300 |
+
+- **mock을 먼저** 켠다. mock 없이 열면 로그인·목록이 실패한다.
 - 3000번은 쓰지 않는다(다른 프로젝트).
 - 계정: `admin` / `admin1234!` (관리자), `editor` / `editor1234!` (담당자)
-- mock은 메모리 저장이라 껐다 켜면 처음 데이터로 돌아간다.
+- mock은 메모리 저장이라 껐다 켜면 처음 데이터로 돌아간다. 관리자 화면에서 갑자기 로그아웃되면 다시 로그인하면 된다.
+
+### 잘 안 될 때
+
+| 증상 | 해결 |
+| --- | --- |
+| `Failed to resolve import "@hanui/vue"` / 화면이 하얗다 | 1단계(라이브러리 빌드)를 다시 |
+| `Port 4010(3400·3300) is already in use` | 이미 켜진 서버가 있다 — 그 터미널을 쓰거나 `lsof -i :4010`으로 찾아 종료 |
+| 관리자 로그인이 "요청 실패" | 1번 터미널의 mock이 켜져 있는지 확인 |
+| 코드 편집기 대신 "기본 입력칸을 씁니다" 안내 | 관리자 터미널에서 Ctrl+C 후 `pnpm dev:admin` 다시, 브라우저 새로고침 |
 
 결과 적는 법: `통과` 또는 `어느 화면 / 무엇을 했더니 / 어떻게 됐다`
 
