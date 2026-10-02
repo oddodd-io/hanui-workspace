@@ -237,8 +237,8 @@ Vue 컴포넌트(`@hanui/vue`)는 KRDS 리소스를 vendor로 그대로 쓰며, 
   - **기록 정정**: 이전 항목의 "테스트 91개"는 실제 97개, "코드 정리 테스트 5개"는 6개였음. "계약 테스트가 실제 요청·응답을 모두 검사"는 과장이었음(호출 안 한 동작·404·405 누락) → 이번에 모든 동작 호출 확인을 추가. query·path 파라미터·multipart·비JSON 응답 본문은 여전히 스키마 검사 밖
   - **남은 것**
     - 실제 화면낭독기·한글 IME·200% 확대·고대비 모드 확인
-    - pnpm audit(의존성 감사) 미실행
-    - 계약 lint를 `pnpm test`에 연결(CI 없음)
+    - [x] pnpm audit (2026-10-02): high 1건 — `node-forge` ≤1.4.0 RSA 서명 검증 결함(GHSA-86w9-cpqp-85rv). 경로 `apps/public > nuxt > @nuxt/cli > listhen > node-forge`(개발 서버의 HTTPS 인증서용). 공개 사이트 빌드 결과(.output)에 포함되지 않음을 확인, 수정 버전 없음 → **개발 도구 한정으로 보류**, 수정 버전이 나오면 갱신. 운영 배포물 기준으로는 납품 전 다시 감사
+    - [x] 계약 lint를 `pnpm test`에 연결 (hanui-vue-cms, api 패키지: `pnpm lint:contract && vitest run`, @redocly/cli 2.57.0 고정). 의도한 예외 1건(변경 기록 DELETE는 405만 — 기록 보존)은 `.redocly.lint-ignore.yaml`. CI는 아직 없음
 - [x] **1차 독립 검토 OK** (2026-10-02, hanui-vue-cms `dc0e67a`) — 같은 4개 관점의 검토자가 수정분을 다시 확인
   - **재검증 결과**: High 7건 모두 PASS — 보안 PASS×2, 동작 정확성 PASS×2(APPROVE), 계약·테스트 PASS×3(APPROVE), 접근성 High PASS
   - **재검증에서 새로 나온 것 → 반영**
