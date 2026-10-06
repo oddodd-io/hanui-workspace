@@ -188,6 +188,17 @@ HANUI CMS 백엔드는 **전자정부 표준프레임워크(eGovFrame) v5**를 �
 - 비밀번호는 적응형 해시(bcrypt·scrypt·Argon2). 초기화·변경·사용 중지 때 그 계정의 세션을 무효화한다. 로그인 잠금은 계정 단위 + IP 기준 제한을 함께 검토한다.
 - 오류 응답 모양(`message`·`fieldErrors`·`issues`·`code`)과 상태 코드 의미(400·401·403·404·405·409·429)를 계약에 적었다. 관리자 API는 모두 401·403을 돌려줄 수 있다.
 
+## 2026-10-06 · 사이트 본문 CSS는 한 곳 (`site-config/src/site.css`) + `pnpm site-css`
+
+**상태: 사용자 확정** — 사용자: "너무 2000n으로 폴더 만들어서 한정하지 말고, 우린 일반적인 사이트를 만드는 거고, 한 개의 CMS에 몇 개의 사이트를 만들진 않잖아."
+
+- CMS 하나 = 사이트 하나 → 본문 CSS는 테마 폴더가 아니라 `packages/site-config/src/site.css` 한 파일(공개 사이트·관리자 미리보기 모두). 디자인 이미지는 `apps/public/public/site/`(관리자도 같은 publicDir).
+- 원본 CSS를 그대로 붙여 넣으면 rem 기준(원본 15px vs KRDS 10px)과 전체 선택자(input 등)가 KRDS를 깨므로 **변환 명령** `pnpm site-css <원본.css> --rem-base 15 --strip .contents`: 선택자 본문 범위화, rem→px, 감싸개 클래스(.contents) 제거, url → /site/, @font-face·@import 제외, site.css의 "가져온 CSS" 구역만 교체(다시 실행 가능), 직접 쓴 보정은 별도 구역.
+- 사이트 가져오기의 "원본 클래스 정리"는 site.css에 있는 클래스를 기본으로 남김(관리자가 `site.css?raw`를 읽음 — CORS 불필요). 순서: CSS 먼저 → 사이트 가져오기.
+- 2000n 테마 설정에는 로고·푸터 링크만 남음(다음: 사이트 설정으로 옮겨 테마 설정 자체를 없애는 것 검토).
+- 확인: 2000n contents.css + comm.css 변환 시험(규칙 361개, rem 40곳, `.contents .tit_square` → `.cms-post-body .tit_square`) 후 원래대로 되돌림 — 실제 실행은 사용자가 직접 시험.
+- 구현: hanui-vue-cms `a3f7fee`.
+
 ## 2026-10-06 · ②를 "KRDS 그대로 + 기관 로고·본문 블록"으로 줄임
 
 **상태: 사용자 확정** — 사용자: "header, footer, snb 등 웬만하면 KRDS를 지키되, 내용만 2000n 내용을 넣으려고. 이 CMS의 강점은 KRDS + 웹접근성."
